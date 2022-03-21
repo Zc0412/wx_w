@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([[40],{kizw:function(i,n,t){"use strict";t.r(n);var e=t("9kvl"),r=t("Ty5D"),l=t("nKUr");n["default"]=i=>{var n,t=Object(e["e"])("@@initialState"),c=t.initialState;return null!==c&&void 0!==c&&null!==(n=c.currentUser)&&void 0!==n&&n.id?Object(l["jsx"])("div",{children:i.children}):Object(l["jsx"])(r["b"],{to:"/login"})}}}]);
