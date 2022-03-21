@@ -25,5 +25,5 @@
 FROM nginx:latest
 #LABEL maintainer "mhh@yuntsoft.com"
 ADD dist/ /usr/share/nginx/html/
-ADD nginx.conf /etc/nginx/
+#ADD nginx.conf /etc/nginx/
 EXPOSE 80
