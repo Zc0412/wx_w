@@ -1,114 +1,34 @@
-# wxcloudrun-koa
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-[![GitHub license](https://img.shields.io/github/license/WeixinCloud/wxcloudrun-koa)](https://github.com/WeixinCloud/wxcloudrun-koa)
-![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/WeixinCloud/wxcloudrun-koa/koa)
-![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/WeixinCloud/wxcloudrun-koa/sequelize)
+## Getting Started
 
-微信云托管 Node.js Koa 框架模版，实现简单的计数器读写接口，使用云托管 MySQL 读写、记录计数值。
+First, run the development server:
 
-![](https://qcloudimg.tencent-cloud.cn/raw/be22992d297d1b9a1a5365e606276781.png)
-
-## 快速开始
-
-前往 [微信云托管快速开始页面]()，选择相应语言的模板，根据引导完成部署。
-
-## 项目结构说明
-
-```
-.
-├── Dockerfile
-├── README.md
-├── container.config.json
-├── db.js
-├── index.js
-├── index.html
-├── package.json
+```bash
+npm run dev
+# or
+yarn dev
 ```
 
-- `index.js`：项目入口，实现主要的读写 API
-- `db.js`：数据库相关实现，使用 `sequelize` 作为 ORM
-- `index.html`：首页代码
-- `package.json`：Node.js 项目定义文件
-- `container.config.json`：云托管部署配置文件
-- `Dockerfile`：容器配置文件
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 服务 API 文档
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-### `GET /api/count`
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-获取当前计数
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-#### 请求参数
+## Learn More
 
-无
+To learn more about Next.js, take a look at the following resources:
 
-#### 响应结果
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-- `code`：错误码
-- `data`：当前计数值
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-##### 响应结果示例
+## Deploy on Vercel
 
-```json
-{
-  "code": 0,
-  "data": 42
-}
-```
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-#### 调用示例
-
-```
-curl https://<云托管服务域名>/api/count
-```
-
-### `POST /api/count`
-
-更新计数，自增或者清零
-
-#### 请求参数
-
-- `action`：`string` 类型，枚举值
-  - 等于 `"inc"` 时，表示计数加一
-  - 等于 `"clear"` 时，表示计数重置（清零）
-
-##### 请求参数示例
-
-```
-{
-  "action": "inc"
-}
-```
-
-#### 响应结果
-
-- `code`：错误码
-- `data`：当前计数值
-
-##### 响应结果示例
-
-```json
-{
-  "code": 0,
-  "data": 42
-}
-```
-
-#### 调用示例
-
-```
-curl -X POST -H 'content-type: application/json' -d '{"action": "inc"}' https://<云托管服务域名>/api/count
-```
-
-## 使用注意
-如果不是通过微信云托管控制台部署模板代码，而是自行复制/下载模板代码后，手动新建一个服务并部署，需要在「服务设置」中补全以下环境变量，才可正常使用，否则会引发无法连接数据库，进而导致部署失败。
-- MYSQL_ADDRESS
-- MYSQL_PASSWORD
-- MYSQL_USERNAME
-以上三个变量的值请按实际情况填写。如果使用云托管内MySQL，可以在控制台MySQL页面获取相关信息。
-
-
-
-## License
-
-[MIT](./LICENSE)
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

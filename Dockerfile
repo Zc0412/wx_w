@@ -1,29 +1,41 @@
-#FROM alpine:3.13
-#
-## 安装依赖包，如需其他依赖包，请到alpine依赖包管理(https://pkgs.alpinelinux.org/packages?name=php8*imagick*&branch=v3.13)查找。
-#RUN apk add --update --no-cache nodejs npm
-#
-## # 指定工作目录
-#WORKDIR /app
-#
-## 拷贝包管理文件
-#COPY package*.json /app
-#
-## npm 源，选用国内镜像源以提高下载速度 ls
-#RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
-## RUN npm config set registry https://registry.npm.taobao.org/
-#
-## npm 安装依赖
-#RUN npm install
-#
-## 将当前目录（dockerfile所在目录）下所有文件都拷贝到工作目录下
-#COPY . /app
-#
-## 执行启动命令
-#CMD ["npm", "start"]
+# Install dependencies only when needed
+FROM node:alpine AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-FROM nginx:latest
-#LABEL maintainer "mhh@yuntsoft.com"
-ADD dist/ /usr/share/nginx/html/
-#ADD nginx.conf /etc/nginx/
-EXPOSE 80
+# Rebuild the source code only when needed
+FROM node:alpine AS builder
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+
+# Production image, copy all the files and run next
+FROM node:alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# You only need to copy next.config.js if you are NOT using the default configuration
+# COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+USER nextjs
+
+EXPOSE 3000
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+CMD ["yarn", "start"]
